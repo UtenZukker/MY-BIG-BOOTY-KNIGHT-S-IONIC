@@ -1,0 +1,60 @@
+<!-- home.page.html -->
+
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item routerLink="/home">Home</ion-item>
+      <ion-item routerLink="/quiz">Quiz</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">IT - WIZ 3A Edition</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main-content" class="ion-padding">
+  <h1 class="app-title">Welcome to the IT-WIZ 3-A Edition</h1>
+
+  <p class="description">
+    This application is created to help you review and strengthen your knowledge
+    from our class lessons.
+  </p>
+
+  <h2 class="tagline">Syntax check complete. Execute the learning.</h2>
+
+  <ion-item>
+    <ion-input
+      [(ngModel)]="username"
+      label="Enter your name"
+      labelPlacement="floating"
+    ></ion-input>
+  </ion-item>
+
+  <br />
+
+  <ion-button expand="block" (click)="startQuiz()"> Start Quiz </ion-button>
+</ion-content>
+
+<h2>Welcome, {{ username }}!</h2>
+
+<h3>Past Scores</h3>
+<ion-list>
+  <ion-item *ngFor="let record of scoreHistory">
+    <ion-label>
+      <p><strong>{{ record.category }}</strong></p>
+      <p>{{ record.score }} / {{ record.total }} on {{ record.date }}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>

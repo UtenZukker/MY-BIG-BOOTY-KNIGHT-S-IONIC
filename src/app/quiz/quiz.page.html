@@ -1,0 +1,125 @@
+<ion-menu contentId="quiz-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item routerLink="/home">Home</ion-item>
+      <ion-item (click)="goBackToCategories()">Restart Quiz</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">IT-WIZ Quiz</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="quiz-content" class="ion-padding">
+  <!-- CATEGORY SELECTION -->
+  <div *ngIf="!selectedCategory" class="ion-text-center welcome-container">
+    <h2>Hello, {{ username }}! 👋</h2>
+    <p>Select a category to start your quiz:</p>
+
+    <ion-list lines="none">
+      <ion-item
+        *ngFor="let cat of categories"
+        button
+        class="category-button"
+        (click)="startQuiz(cat)"
+      >
+        {{ cat }}
+      </ion-item>
+
+      <ion-item
+        button
+        color="danger"
+        class="category-button"
+        (click)="startTimeAttack()"
+      >
+        ⏱️ Time Attack Mode
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- QUIZ -->
+  <div *ngIf="selectedCategory && !showResult">
+    <h3 class="ion-text-center">{{ selectedCategory }}</h3>
+
+    <h4 *ngIf="isTimeAttack" class="ion-text-center time-left">
+      Time left: {{ timeLeft }}s ⏳
+    </h4>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">
+          {{ currentQuestion.question }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="full">
+          <ion-item
+            *ngFor="let choice of currentQuestion.choices; let i = index"
+            button
+            (click)="selectAnswer(i)"
+            [color]="selectedAnswer === i ? 'primary' : 'light'"
+            class="choice-item"
+          >
+            {{ choice }}
+          </ion-item>
+        </ion-list>
+
+        <ion-button
+          expand="block"
+          [disabled]="selectedAnswer === null"
+          (click)="nextQuestion()"
+        >
+          Next
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- RESULT + REVIEW -->
+  <div *ngIf="showResult" class="ion-text-center result-container">
+    <h2>🎉 Quiz Completed!</h2>
+    <p class="score-text">
+      Your Score:
+      <strong>{{ score }}</strong> / {{ randomizedQuestions.length }}
+    </p>
+
+    <h3>Review Answers:</h3>
+    <ion-list>
+      <ion-item *ngFor="let q of randomizedQuestions; let i = index">
+        <ion-label>
+          <strong>Q{{ i + 1 }}:</strong> {{ q.question }}
+          <p>
+            Your answer:
+            <span
+              [style.color]="selectedAnswers[i] === q.answer ? 'green' : 'red'"
+            >
+              {{ getUserAnswer(i) }}
+            </span>
+          </p>
+
+          <p style="color: green">Correct answer: {{ q.choices[q.answer] }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" color="primary" (click)="retryQuiz()">
+      🔄 Retry This Category
+    </ion-button>
+    <ion-button expand="block" color="medium" (click)="goBackToCategories()">
+      🏠 Back to Categories
+    </ion-button>
+  </div>
+</ion-content>
